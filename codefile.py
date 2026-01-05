@@ -7,6 +7,7 @@ from py_clob_client.clob_types import ApiCreds, OrderArgs
 from py_clob_client.constants import POLYGON
 from py_clob_client.order_builder.constants import BUY, SELL
 from py_clob_client.clob_types import OrderType
+import cloudscraper  # Add this import at the top
 
 load_dotenv()
 
@@ -48,15 +49,9 @@ last_timestamp = 0
 
 while True:
     try:
-        # Fetch recent activity (trades only) for the target address
-        activity_url = "https://data-api.polymarket.com/activity"
-        params = {
-            "user": TARGET_PROXY_ADDRESS,
-            "type": "TRADE",          # Only trades
-            "limit": 20,              # Get a few to be safe
-            "order": "desc"           # Most recent first
-        }
-        response = requests.get(activity_url, params=params)
+        scraper = cloudscraper.create_scraper()  # Uses browser-like behavior + JS solver
+
+        response = scraper.get(activity_url, params=params)
         response.raise_for_status()
         activities = response.json()
 
