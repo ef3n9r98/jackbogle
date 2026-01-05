@@ -49,6 +49,14 @@ last_timestamp = 0
 
 while True:
     try:
+        activity_url = "https://data-api.polymarket.com/activity"
+        params = {
+            "user": TARGET_PROXY_ADDRESS,
+            "type": "TRADE",
+            "limit": 20,
+            "order": "desc"
+        }
+        
         scraper = cloudscraper.create_scraper()  # Uses browser-like behavior + JS solver
 
         response = scraper.get(activity_url, params=params)
